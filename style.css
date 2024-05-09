@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('assets/fon.gif') no-repeat center center/cover;
+  }
+
+  .menu-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .level-menu {
+    display: none; /* Початково приховано */
+  }
+
+
+  button#start-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #110025;
+    color: white;
+    border: none;
+    border-radius: 20px; /* Овальна форма */
+    cursor: pointer;
+  }
+  
+  button#start-btn:hover {
+    background-color: #3f0086;
+  }
+
+  .level-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 100px;
+  }
+  
+  .level-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #110025;
+    color: white;
+    border: none;
+    border-radius: 20px; /* Овальна форма */
+    cursor: pointer;
+  }
+  
+  .level-button:hover {
+    background-color: #3f0086;
+  }
+  
+  .level-menu h2 {
+    text-align: center; /* Вирівнювання тексту по центру по горизонталі */
+    border-radius: 15px; /* Менш закруглені кути */
+    color: white; /* Білий колір тексту */
+ 
+  }
