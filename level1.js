@@ -32,7 +32,7 @@ function preload() {
 
 // Основна функція гри
 function create() {
-    this.add.image(0, 0, 'grow')
+    this.add.image(0, 0, 'gamefon')
         .setOrigin(0);
 }
 
