@@ -2,8 +2,8 @@
 var config = {
     // Задаємо тип фреймворку Phaser, щоб він автоматично визначав найкращий тип (WEBGL або CANVAS).
     type: Phaser.AUTO,
-    width: 1920,
-    height: 1080,
+    width: 1500,
+    height: 900,
     // Налаштовуємо фізичний движок гри.
     physics: {
         // Встановлюємо фізичний движок за замовчуванням на Arcade Physics.
