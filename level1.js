@@ -17,7 +17,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-var worldWidth = 9600;
+var worldWidth = 3000;
 var cursors;
 var grow;
 var player;
@@ -30,11 +30,17 @@ var startText;
 
 
 function preload() {
+
+ // Створюємо об'єкт cursors, щоб слідкувати за натисканням клавіш курсору.
+ cursors = this.input.keyboard.createCursorKeys();
+
     this.load.image('gamefon', 'assets/gamefon.png');
     this.load.image('grow', 'assets/grow.png');
     this.load.spritesheet('hero', 'assets/hero.png', { frameWidth: 32, frameHeight: 48 });
     this.load.image('stimage', 'assets/gamet.png');
+    this.load.image('cpase', 'assets/cpase.png');
 }
+
 
 
 
@@ -47,10 +53,9 @@ function create() {
 
 
 
-
     // Відобразіть стартове зображення
     stimage = this.add.image(200, 325, 'stimage');
-
+    stimage = this.add.image(900, 325, 'cpase');
 
 
 
@@ -58,6 +63,8 @@ function create() {
     startText = this.add.text(200, 390, 'Кнопки керування', { font: '32px Arial', fill: '#ffffff' })
         .setOrigin(0.5, 0.5);
 
+        startText = this.add.text(900, 390, 'Постріл', { font: '32px Arial', fill: '#ffffff' })
+        .setOrigin(0.5, 0.5);
 
 
 
@@ -112,8 +119,17 @@ function create() {
 
 
 
-}
+    // // Налаштування камери
+    // this.cameras.main.setBounds(0, 0, worldWidth, 0); // Встановлюємо межі камери
+    // this.cameras.main.startFollow(player, true, 0.1, 0, 0, 300); // Слідкуємо за гравцем по горизонталі з невеликим затримкою, без вертикального слідкування
 
+    this.cameras.main.setBounds(0, 0, worldWidth, 1080);
+    this.physics.world.setBounds(0, 0, worldWidth, 1080);
+    this.cameras.main.startFollow(player, true, 0.1, 0, 0, 300); // Слідкуємо за гравцем по горизонталі з невеликим затримкою, без вертикального слідкування
+    
+
+    
+}
 
 
 
@@ -134,4 +150,10 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-520);
     }
+
+
+ 
+
+
+
 }
