@@ -1,4 +1,4 @@
-const config = {
+var config = {
     type: Phaser.AUTO,
     width: 1200,
     height: 650,
@@ -9,49 +9,129 @@ const config = {
             debug: false,
         }
     },
-    scene: { preload, create, update }
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
 };
 
-const game = new Phaser.Game(config);
-const worldWidth = 1200 * 3;
-let cursors, grow, player;
+var game = new Phaser.Game(config);
+var worldWidth = 9600;
+var cursors;
+var grow;
+var player;
+var stimage
+var startText;
+
+
+
+
+
 
 function preload() {
     this.load.image('gamefon', 'assets/gamefon.png');
     this.load.image('grow', 'assets/grow.png');
     this.load.spritesheet('hero', 'assets/hero.png', { frameWidth: 32, frameHeight: 48 });
-    this.load.image('startImage', 'assets/startImage.png');
+    this.load.image('stimage', 'assets/gamet.png');
 }
+
+
+
 
 function create() {
-    const startImage = this.add.image(600, 275, 'startImage');
-    const startText = this.add.text(600, 450, 'Натисніть, щоб почати гру', { font: '32px Arial', fill: '#ffffff' }).setOrigin(0.5);
-    this.time.delayedCall(3000, () => { startImage.destroy(); startText.destroy(); startGame.call(this); }, [], this);
-}
+    this.add.tileSprite(0, 0, worldWidth, 1080, "gamefon")
+        .setOrigin(0, 0)
+        .setScale(1)
+        .setDepth(0);
 
-function startGame() {
-    this.add.tileSprite(0, 0, worldWidth, 1080, "gamefon").setOrigin(0).setScale(1).setDepth(0);
+
+
+
+    // Відобразіть стартове зображення
+    stimage = this.add.image(200, 325, 'stimage');
+
+
+
+
+    // Додайте текст під зображенням
+    startText = this.add.text(200, 390, 'Кнопки керування', { font: '32px Arial', fill: '#ffffff' })
+        .setOrigin(0.5, 0.5);
+
+
+
+
+
+
     grow = this.physics.add.staticGroup();
-    for (let x = 0; x < worldWidth; x += 128) grow.create(x, 560, "grow").setOrigin(0).refreshBody();
 
-    player = this.physics.add.sprite(100, 500, 'hero').setBounce(0.2).setDepth(Phaser.Math.Between(4, 5)).setCollideWorldBounds(true).setScale(2);
+    for (var x = 0; x < worldWidth; x = x + 128) {
+        grow.create(x, 560, "grow").setOrigin(0, 0).refreshBody();
+    }
+
+    player = this.physics.add.sprite(100, 500, 'hero');
+    player.setBounce(0.2)
+        .setDepth(Phaser.Math.Between(4, 5))
+        .setCollideWorldBounds(true)
+        .setScale(2); // Збільшуємо розмір персонажа вдвічі
+
     player.body.setGravityY(300);
+
     this.physics.add.collider(player, grow);
+
     cursors = this.input.keyboard.createCursorKeys();
 
-    ['left', 'right'].forEach(dir => {
-        this.anims.create({ key: dir, frames: this.anims.generateFrameNumbers('hero', { start: (dir === 'left' ? 0 : 5), end: (dir === 'left' ? 3 : 8) }), frameRate: 10, repeat: -1 });
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
     });
-    this.anims.create({ key: 'turn', frames: [{ key: 'hero', frame: 4 }], frameRate: 20 });
 
-    this.cameras.main.setBounds(0, 0, worldWidth, 650);
-    this.cameras.main.startFollow(player, true, 0.05, 0.05);
+    this.anims.create({
+        key: 'turn',
+        frames: [{ key: 'hero', frame: 4 }],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('hero', { start: 5, end: 8 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    // Додаємо кнопку для перезапуску гри.
+    var resetButton = this.add.text(550, 70, '♻️', { fontSize: '60px', fill: '#FFF' })
+        .setInteractive()
+        .setScrollFactor(0);
+    resetButton.on('pointerdown', function () {
+        console.log('restart');
+        location.reload();
+    });
+
+
+
 }
 
-function update() {
-    const velocityX = cursors.left.isDown ? -160 : (cursors.right.isDown ? 160 : 0);
-    player.setVelocityX(velocityX);
-    player.anims.play((velocityX < 0 ? 'left' : (velocityX > 0 ? 'right' : 'turn')), true);
 
-    if (cursors.up.isDown && player.body.touching.down) player.setVelocityY(-520);
+
+
+
+
+function update() {
+    if (cursors.left.isDown) {
+        player.setVelocityX(-500);
+        player.anims.play('left', true);
+    } else if (cursors.right.isDown) {
+        player.setVelocityX(500);
+        player.anims.play('right', true);
+    } else {
+        player.setVelocityX(0);
+        player.anims.play('turn');
+    }
+
+    if (cursors.up.isDown && player.body.touching.down) {
+        player.setVelocityY(-520);
+    }
 }

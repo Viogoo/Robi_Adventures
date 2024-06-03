@@ -57,3 +57,14 @@ body {
     color: white; /* Білий колір тексту */
  
   }
+ 
+ 
+  #myAudio {
+    display: none;
+}
+
+#level1video {
+    display: none;
+    width: 100%;
+    height: auto;
+}

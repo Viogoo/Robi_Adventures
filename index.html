@@ -6,24 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Menu</title>
     <link rel="stylesheet" href="style.css">
+    
 </head>
 
 <body>
+    <audio id="myAudio" loop>
+        <source src="assets/lobymusic.mp3" type="audio/mpeg">
+        Ваш браузер не підтримує елемент аудіо.
+    </audio>
+   
     <!-- Головне меню -->
     <div class="menu-container">
         <button id="start-btn">Start</button>
+    </div>
 
-    </div>
-    </div>
     <!-- Вікно вибору рівнів (початково приховано) -->
-    <div class="level-menu" id="level-menu">
+    <div class="level-menu" id="level-menu" style="display: none;">
         <h2>Вибір рівня</h2>
         <div class="level-buttons">
             <button class="level-button" id="level1-btn">Рівень 1</button>
             <button class="level-button">Рівень 2</button>
             <button class="level-button">Рівень 3</button>
         </div>
-        <script src="menu.js"></script>
+    </div>
+
+
+    
+    <!-- Відео -->
+    <video id="level1video" controls="false">
+        <source src="assets/level1video.mov" type="video/mp4">
+        Ваш браузер не підтримує елемент відео.
+    </video>
+    
+    <script src="menu.js"></script>
 </body>
 
 </html>
+
