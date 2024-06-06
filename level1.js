@@ -135,11 +135,19 @@ function create() {
     this.physics.add.collider(key, grow); // Колізія з платформами
     this.physics.add.overlap(player, key, collectKey, null, this); // Колізія з гравцем
 
-    // Додаємо ворога на конкретній позиції
-    enemy = this.physics.add.sprite(2500, 500, 'enemy'); // Замінити 800, 500 на потрібні координати
-    enemy.health = enemyHealth; // Присвоюємо ворогу початкове здоров'я
-    this.physics.add.collider(enemy, grow); // Колізія з платформами
-    this.physics.add.overlap(bullets, enemy, hitEnemyWithBullet, null, this); // Колізія з кулями
+    // // Додаємо ворога на конкретній позиції
+    // enemy = this.physics.add.sprite(2500, 500, 'enemy'); // Замінити 800, 500 на потрібні координати
+    // enemy.health = enemyHealth; // Присвоюємо ворогу початкове здоров'я
+    // this.physics.add.collider(enemy, grow); // Колізія з платформами
+    // this.physics.add.overlap(bullets, enemy, hitEnemyWithBullet, null, this); // Колізія з кулями
+ // Створюємо ворога та додаємо колізію між гравцем та ворогом.
+ enemy = this.physics.add.sprite(2500, 500, 'enemy');
+ enemy.dead = false; // Додаємо цю стрічку
+ this.physics.add.collider(enemy,grow);
+ this.physics.add.collider(player, enemy, hitEnemy, null, this);
+
+
+
 }
 
 function update() {
@@ -192,5 +200,54 @@ function hitEnemyWithBullet(bullet, enemy) {
 
     if (enemy.health <= 0) {
         enemy.disableBody(true, true); // Видалити ворога
+    }
+}
+
+
+
+// Метод, який обробляє зіткнення гравця з ворогом.
+function hitEnemy(player, enemy) {
+    // Зменшуємо кількість життів гравця.
+    life--;
+    // Оновлюємо текст, що відображає кількість життів гравця.
+    lifeText.setText(showLife());
+
+    // Перевіряємо, з якого боку зіткнувся гравець з ворогом та змінюємо його швидкість.
+    if (player.x < enemy.x) {
+        player.setVelocityX(200);
+    } else {
+        player.setVelocityX(-200);
+    }
+    player.setVelocityY(-400);
+
+    // Якщо кількість життів стає менше або дорівнює нулю, гру призупиняємо та відображаємо гравця як пошкодженого.
+    if (life <= 0) {
+        this.physics.pause();
+        player.setTint(0xff0000);
+        player.anims.play('turn');
+    }
+}
+
+
+// Метод, який обробляє зіткнення кулі з ворогом.
+function hitEnemyWithBullet(enemy, bullet) {
+    // Зменшуємо кількість життів ворога.
+    enemyLives--;
+  
+    // Знищуємо кулю.
+    bullet.destroy();
+
+    // Змінюємо швидкість ворога після зіткнення з кулею.
+    if (player.x < enemy.x) {
+        enemy.setVelocityX(10);
+    } else {
+        enemy.setVelocityX(-10);
+    }
+    enemy.setVelocityY(-100);
+
+    // Якщо кількість життів ворога стає менше або дорівнює нулю і ворог ще не мертвий, знищуємо ворога.
+    if (enemyLives <= 0 && !enemy.dead) {
+        enemy.dead = true;
+        enemy.destroy();
     }
 }
